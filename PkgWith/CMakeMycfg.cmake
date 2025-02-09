@@ -1,8 +1,8 @@
 # OutPath
 if (CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/x32-${CMAKE_BUILD_TYPE}/")
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/x32-${CMAKE_BUILD_TYPE}/")
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/x32-${CMAKE_BUILD_TYPE}/lib/")
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/x86-${CMAKE_BUILD_TYPE}/")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/x86-${CMAKE_BUILD_TYPE}/")
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/x86-${CMAKE_BUILD_TYPE}/lib/")
 else()
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/x64-${CMAKE_BUILD_TYPE}/")
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/x64-${CMAKE_BUILD_TYPE}/")
@@ -19,15 +19,13 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     if(IPO_CHECK_RESULT)
         set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
     else()
-        message(WARNING "IPO is not supported: ${output}")
+        message(WARNING "LTCG is not supported: ${output}")
     endif()
 
-    # Static Library
-    set(BUILD_SHARED_LIBS OFF)
-
-    # Static Runtime
+    # Compiler
     if(MSVC)
-        set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreaded)
+        add_compile_options(/Gy)
+        add_compile_options(/Zc:inline)
     else()
         SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
         add_compile_options(-ffunction-sections)
@@ -38,14 +36,5 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
             add_link_options(-s)
         endif()
     endif()
-else()
-    set(BUILD_SHARED_LIBS ON)
 endif()
 
-# Compiler
-if(MSVC)
-    if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-        add_compile_options(/Gy)
-        add_compile_options(/Zc:inline)
-    endif()
-endif()
