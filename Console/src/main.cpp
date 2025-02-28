@@ -13,3 +13,4 @@ auto main(void) -> int
         std::println(std::cerr, "std::exception: {}", err.what());
     }
 }
+

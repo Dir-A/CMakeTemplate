@@ -6,7 +6,9 @@ namespace My::MxHello
     class SayHello
     {
     public:
-        static auto Say() -> void;
+        auto Say() -> void;
 
     };
+
+    void SayC();
 }

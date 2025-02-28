@@ -7,7 +7,8 @@ auto main(void) -> int
 {
     try
     {
-        My::MxHello::SayHello::Say();
+        My::MxHello::SayC();
+        My::MxHello::SayHello{}.Say();
     }
     catch (const std::exception& err)
     {

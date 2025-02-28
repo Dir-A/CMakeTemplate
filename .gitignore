@@ -1,9 +1,10 @@
+# CMake
+.build/
+.install/
+
 # Xmake
 .xmake/
 vsxmake2022/
-
-# CMake
-.build/
 
 # VS
 .vs/
