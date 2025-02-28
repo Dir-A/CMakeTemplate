@@ -31,7 +31,7 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
 
     # GNU
     # on linux static link may cause some problems
-    if(MINGW AND DIRA_MINGW_ENABLE_STATIC_LINK)
+    if(MINGW AND ZQF_MINGW_STATIC_LINK)
         set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
         add_link_options($<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>>:-static>)
     endif()

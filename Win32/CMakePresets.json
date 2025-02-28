@@ -253,7 +253,7 @@
             "inherits": "mingw-x64-release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "DIRA_MINGW_ENABLE_STATIC_LINK": true
+                "ZQF_MINGW_STATIC_LINK": true
             }
         }
     ]
