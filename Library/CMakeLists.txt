@@ -6,13 +6,14 @@ project(My_MxHello_Main)
 
 # Config
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    include(cmake/ZQFSettings.cmake)
+    include("cmake/ZQFSettings.cmake")
 endif()
 
 # Source
-add_subdirectory(src)
+add_subdirectory("src")
 
-# Tests
+# Dev
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    add_subdirectory(test)
+    add_subdirectory("test")
+    add_subdirectory("tryout")
 endif()
