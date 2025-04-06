@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.25)
 project(MySayHelloDLL)
 
 # Config
-include(cmake/PersonalSettings.cmake)
+include(cmake/ZQFSettings.cmake)
 
 # Executable
 add_library(${PROJECT_NAME} MODULE "src/dllmain.cpp")

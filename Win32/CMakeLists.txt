@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.25)
 project(MySayHello)
 
 # Config
-include(cmake/PersonalSettings.cmake)
+include(cmake/ZQFSettings.cmake)
 
 # Executable
 add_executable(${PROJECT_NAME} "src/main.cpp")

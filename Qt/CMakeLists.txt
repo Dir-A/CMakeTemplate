@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 project(HelloQT)
 
 # Config
-include(cmake/PersonalSettings.cmake)
+include(cmake/ZQFSettings.cmake)
 
 # Executable
 add_executable(${PROJECT_NAME} "src/main.cpp")
@@ -19,7 +19,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CX
 # Properties
 # set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
 
-# Libraries
+# External Libraries
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
 

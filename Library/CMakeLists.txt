@@ -6,7 +6,7 @@ project(My_MxHello_Main)
 
 # Config
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    include(cmake/PersonalSettings.cmake)
+    include(cmake/ZQFSettings.cmake)
 endif()
 
 # Source
