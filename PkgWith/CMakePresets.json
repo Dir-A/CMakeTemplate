@@ -23,7 +23,7 @@
             }
         },
         {
-            "name": "linux-gcc-base",
+            "name": "unix-gcc-base",
             "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/.build/${presetName}",
@@ -34,13 +34,23 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true
             },
             "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
+                "type": "anyOf",
+                "conditions": [
+                    {
+                        "type": "equals",
+                        "lhs": "${hostSystemName}",
+                        "rhs": "Linux"
+                    },
+                    {
+                        "type": "equals",
+                        "lhs": "${hostSystemName}",
+                        "rhs": "Darwin"
+                    }
+                ]
             }
         },
         {
-            "name": "mingw-base",
+            "name": "mingw-gcc-base",
             "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/.build/${presetName}",
@@ -51,9 +61,19 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true
             },
             "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
+                "type": "anyOf",
+                "conditions": [
+                    {
+                        "type": "equals",
+                        "lhs": "$env{MSYSTEM}",
+                        "rhs": "MINGW32"
+                    },
+                    {
+                        "type": "equals",
+                        "lhs": "$env{MSYSTEM}",
+                        "rhs": "MINGW64"
+                    }
+                ]
             }
         },
         {
@@ -199,9 +219,9 @@
             }
         },
         {
-            "name": "gcc-x64-debug",
-            "displayName": "GCC x64 Debug",
-            "inherits": "linux-gcc-base",
+            "name": "unix-gcc-x64-debug",
+            "displayName": "UNIX GCC x64 Debug",
+            "inherits": "unix-gcc-base",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
@@ -211,9 +231,9 @@
             }
         },
         {
-            "name": "gcc-x64-release",
-            "displayName": "GCC x64 Release",
-            "inherits": "linux-gcc-base",
+            "name": "unix-gcc-x64-release",
+            "displayName": "UNIX GCC x64 Release",
+            "inherits": "unix-gcc-base",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
@@ -223,22 +243,21 @@
             }
         },
         {
-            "name": "mingw-x64-debug",
-            "displayName": "MinGW x64 Debug",
-            "inherits": "mingw-base",
+            "name": "mingw-gcc-x64-debug",
+            "displayName": "MinGW GCC x64 Debug",
+            "inherits": "mingw-gcc-base",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "BUILD_SHARED_LIBS": true
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
-            "name": "mingw-x64-release",
-            "displayName": "MinGW x64 Release",
-            "inherits": "mingw-base",
+            "name": "mingw-gcc-x64-release",
+            "displayName": "MinGW GCC x64 Release",
+            "inherits": "mingw-gcc-base",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
@@ -248,9 +267,9 @@
             }
         },
         {
-            "name": "mingw-x64-release-static",
-            "displayName": "MinGW x64 Release Static",
-            "inherits": "mingw-x64-release",
+            "name": "mingw-gcc-x64-release-static",
+            "displayName": "MinGW GCC x64 Release Static",
+            "inherits": "mingw-gcc-x64-release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "ZQF_MINGW_STATIC_LINK": true
