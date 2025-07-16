@@ -7,6 +7,7 @@ project(My_MxHello_Main)
 # Config
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     include("cmake/ZQFSettings.cmake")
+    include("cmake/Doxygen.cmake")
 endif()
 
 # Source
@@ -17,3 +18,6 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     add_subdirectory("test")
     add_subdirectory("tryout")
 endif()
+
+# Doc
+Doxygen("src" "docs")
