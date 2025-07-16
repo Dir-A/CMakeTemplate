@@ -10,11 +10,7 @@
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "cl.exe",
                 "CMAKE_CXX_COMPILER": "cl.exe",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-                "CMAKE_TOOLCHAIN_FILE": {
-                    "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                    "type": "FILEPATH"
-                }
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
             },
             "condition": {
                 "type": "equals",
@@ -85,8 +81,7 @@
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "VCPKG_TARGET_TRIPLET": "x64-windows"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
@@ -108,8 +103,7 @@
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "VCPKG_TARGET_TRIPLET": "x64-windows"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
@@ -119,7 +113,6 @@
             "cacheVariables": {
                 "BUILD_SHARED_LIBS": false,
                 "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": false,
-                "VCPKG_TARGET_TRIPLET": "x64-windows-static",
                 "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
             }
         },
@@ -164,8 +157,7 @@
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "VCPKG_TARGET_TRIPLET": "x86-windows"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
@@ -187,8 +179,7 @@
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "VCPKG_TARGET_TRIPLET": "x86-windows"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
@@ -198,7 +189,6 @@
             "cacheVariables": {
                 "BUILD_SHARED_LIBS": false,
                 "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": false,
-                "VCPKG_TARGET_TRIPLET": "x86-windows-static",
                 "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
             }
         },
