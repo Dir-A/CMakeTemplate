@@ -1,5 +1,11 @@
-set(CEF_DOWNLOAD_URL "https://cef-builds.spotifycdn.com/cef_binary_138.0.23%2Bg26cc530%2Bchromium-138.0.7204.101_windows64.tar.bz2")
-set(CEF_DOWNLOAD_SHA1 "c0954e75eb0b3091535d2314896f40357c9d99d8")
+if(("Windows" STREQUAL CMAKE_SYSTEM_NAME) AND (CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64"))
+    set(CEF_DOWNLOAD_URL "https://cef-builds.spotifycdn.com/cef_binary_138.0.23%2Bg26cc530%2Bchromium-138.0.7204.101_windows64.tar.bz2")
+    set(CEF_DOWNLOAD_SHA1 "c0954e75eb0b3091535d2314896f40357c9d99d8")
+elseif(("Linux" STREQUAL CMAKE_SYSTEM_NAME) AND (CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64"))
+    set(CEF_DOWNLOAD_URL "https://cef-builds.spotifycdn.com/cef_binary_138.0.23%2Bg26cc530%2Bchromium-138.0.7204.101_linux64.tar.bz2")
+    set(CEF_DOWNLOAD_SHA1 "43f3ca820b4aac464b0c5125e3df05edf36532c3")
+endif()
+
 set(CEF_DOWNLOAD_PATH "${CMAKE_BINARY_DIR}/cef_prebuild.tar.gz")
 set(CEF_EXTRACT_DIR "${CMAKE_BINARY_DIR}/cef_prebuild")
 set(CEF_ROOT "${CEF_EXTRACT_DIR}/bin")
