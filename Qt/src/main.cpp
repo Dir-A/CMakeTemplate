@@ -8,14 +8,25 @@ public:
     explicit MyMainWindow(QWidget* parent = nullptr) :
         QMainWindow(parent)
     {
-        
+
     }
 };
 
 auto main(int argc, char** argv) -> int
 {
-    QApplication app(argc, argv);
-    MyMainWindow main_win;
-    main_win.show();
-    return app.exec();
+    try
+    {
+        QApplication app(argc, argv);
+        MyMainWindow main_win;
+        main_win.show();
+        return app.exec();
+    }
+    catch (const std::exception& err)
+    {
+        std::println(std::cerr, "std::exception: {}", err.what());
+    }
+    catch (...)
+    {
+        std::println(std::cerr, "unknown exception!");
+    }
 }

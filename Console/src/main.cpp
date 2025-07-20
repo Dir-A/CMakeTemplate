@@ -12,5 +12,9 @@ auto main(void) -> int
     {
         std::println(std::cerr, "std::exception: {}", err.what());
     }
+    catch (...)
+    {
+        std::println(std::cerr, "unknown exception!");
+    }
 }
 
