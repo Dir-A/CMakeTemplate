@@ -2,11 +2,15 @@
   "name": "mytest",
   "version": "1.0",
   "dependencies": [
-    "sqlite3"
+    "sqlite3",
+    "zxjson"
   ],
   "vcpkg-configuration": {
     "overlay-ports": [
       "cmake/ports/"
+    ],
+    "overlay-triplets": [
+      "cmake/triplets/"
     ]
   }
 }

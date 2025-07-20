@@ -19,3 +19,5 @@ target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:GNU>,$<CXX
 # External Libaray
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE unofficial::sqlite3::sqlite3)
+find_package(Zut_ZxJson CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE Zut::ZxJson)
