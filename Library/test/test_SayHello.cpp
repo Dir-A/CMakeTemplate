@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
-#include <My/MxHello/SayHello.h>
+#include <My/MxHello/SayHello.hpp>
 
 
 TEST_CASE("SayHello", "[hello]") {
