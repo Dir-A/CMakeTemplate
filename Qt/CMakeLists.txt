@@ -6,10 +6,10 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 # Project
-project(HelloQT)
+project("HelloQT" VERSION 1.0 LANGUAGES C CXX)
 
 # Config
-include(cmake/ZQFSettings.cmake)
+include("cmake/ZQFSettings.cmake")
 
 # Executable
 add_executable(${PROJECT_NAME} "src/main.cpp")

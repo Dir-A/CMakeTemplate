@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 # Project
-project(My_MxHello)
+project("My_MxHello" VERSION 1.0 LANGUAGES C CXX)
 
 # Source
 list(APPEND ${PROJECT_NAME}_SRC_FILE 

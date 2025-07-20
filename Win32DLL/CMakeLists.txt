@@ -2,10 +2,10 @@
 cmake_minimum_required(VERSION 3.25)
 
 # Project
-project(MySayHelloDLL)
+project("MySayHelloDLL" VERSION 1.0 LANGUAGES C CXX)
 
 # Config
-include(cmake/ZQFSettings.cmake)
+include("cmake/ZQFSettings.cmake")
 
 # Executable
 add_library(${PROJECT_NAME} MODULE "src/dllmain.cpp")

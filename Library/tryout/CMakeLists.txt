@@ -1,5 +1,5 @@
 # Project
-project(My_MxHello_Tryout)
+project("My_MxHello_Tryout" VERSION 1.0 LANGUAGES C CXX)
 
 # Executable
 add_executable(${PROJECT_NAME} "main.cpp")

@@ -2,10 +2,10 @@
 cmake_minimum_required(VERSION 3.25)
 
 # Project Name
-project(MySayHello)
+project("MySayHello" VERSION 1.0 LANGUAGES C CXX)
 
 # Project Settings
-include(cmake/ZQFSettings.cmake)
+include("cmake/ZQFSettings.cmake")
 
 # Set Executable
 add_executable(${PROJECT_NAME} "src/main.cpp")

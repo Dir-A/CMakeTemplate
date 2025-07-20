@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 # Project
-project(My_MxHello_Main)
+project("My_MxHello_Main" VERSION 1.0 LANGUAGES C CXX)
 
 # Config
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)

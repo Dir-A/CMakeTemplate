@@ -6,7 +6,7 @@ if(NOT Catch2_FOUND)
 endif()
 
 # Project
-project(MxHello_Test)
+project("MxHello_Test" VERSION 1.0 LANGUAGES C CXX)
 
 # Executable
 add_executable(${PROJECT_NAME} "test_SayHello.cpp")
