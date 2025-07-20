@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     // path values
     if (CefString(&settings.browser_subprocess_path).empty())
     {
-        const auto sub_process_path = std::filesystem::current_path() / "cef_subprocess/cef_subprocess";
+        const auto sub_process_path = std::filesystem::current_path() / CEF_RUNTIME_DIR / CEF_RUNTIME_NAME;
         CefString(&settings.browser_subprocess_path) = sub_process_path.native();
     }
 

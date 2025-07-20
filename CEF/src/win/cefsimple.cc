@@ -7,23 +7,23 @@
 #include "include/cef_version_info.h"
 #include "simple_app.h"
 
-
-// INT APIENTRY wWinMain(_In_ HINSTANCE /*hInstance*/, _In_opt_ HINSTANCE /* hPrevInstance */, _In_ LPWSTR /* lpCmdLine */, _In_ INT /* nShowCmd */)
-auto main() -> int
+#include <print>
+INT APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /* hPrevInstance */, _In_ LPWSTR /* lpCmdLine */, _In_ INT /* nShowCmd */)
 {
-    const auto sub_process_dir = std::filesystem::current_path() / "cef_subprocess";
-    const auto sub_process_path = sub_process_dir / "cef_subprocess.exe";
+    ::AllocConsole();
+    ::freopen("CONOUT$", "w", stdout);
+    ::freopen("CONOUT$", "w", stderr);
 
-    ::SetDllDirectoryW(sub_process_dir.wstring().data());
+    ::SetDllDirectoryW((std::filesystem::current_path() / CEF_RUNTIME_DIR).wstring().data());
 
-    CefMainArgs main_args{ ::GetModuleHandleW(nullptr) };
+    CefMainArgs main_args{ hInstance };
 
     const auto command_line = CefCommandLine::CreateCommandLine();
     command_line->InitFromString(::GetCommandLineW());
 
     CefSettings settings;
     settings.no_sandbox = true;
-    CefString(&settings.browser_subprocess_path).FromWString(sub_process_path.wstring());
+    CefString(&settings.browser_subprocess_path).FromWString(((std::filesystem::current_path() / CEF_RUNTIME_DIR / CEF_RUNTIME_NAME)).wstring());
 
     CefRefPtr<SimpleApp> app(new SimpleApp);
 

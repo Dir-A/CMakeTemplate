@@ -1,7 +1,3 @@
-// Copyright (c) 2014 The Chromium Embedded Framework Authors. All rights
-// reserved. Use of this source code is governed by a BSD-style license that
-// can be found in the LICENSE file.
-
 #include "simple_handler.h"
 
 #if defined(CEF_X11)
@@ -14,8 +10,8 @@
 #include "include/base/cef_logging.h"
 #include "include/cef_browser.h"
 
-void SimpleHandler::PlatformTitleChange(CefRefPtr<CefBrowser> browser,
-    const CefString& title) {
+void SimpleHandler::PlatformTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title)
+{
     std::string titleStr(title);
 
 #if defined(CEF_X11)
