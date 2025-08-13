@@ -9,9 +9,11 @@
 #include "include/wrapper/cef_closure_task.h"
 #include "include/wrapper/cef_helpers.h"
 
-CefRefPtr<MyClient> MyClient::m_upInstance = nullptr;
+#if defined(_WIN32)
+#include <Windows.h>
+#endif
 
-MyClient::~MyClient() {}
+CefRefPtr<MyClient> MyClient::m_upInstance = nullptr;
 
 auto MyClient::GetInstance() -> CefRefPtr<MyClient>
 {
@@ -21,39 +23,6 @@ auto MyClient::GetInstance() -> CefRefPtr<MyClient>
   }
 
   return MyClient::m_upInstance.get();
-}
-
-// CefLifeSpanHandler
-void MyClient::OnAfterCreated(CefRefPtr<CefBrowser> browser)
-{
-  CEF_REQUIRE_UI_THREAD();
-  m_BrowserList.push_back(browser);
-}
-
-// CefLifeSpanHandler
-bool MyClient::DoClose(CefRefPtr<CefBrowser> /*browser*/)
-{
-  CEF_REQUIRE_UI_THREAD();
-
-  if (m_BrowserList.size() == 1)
-  {
-    m_isClosing = true;
-  }
-
-  return false;
-}
-
-// CefLifeSpanHandler
-void MyClient::OnBeforeClose(CefRefPtr<CefBrowser> browser)
-{
-  CEF_REQUIRE_UI_THREAD();
-
-  std::erase_if(m_BrowserList, [&browser](const CefRefPtr<CefBrowser>& brow) { return brow->IsSame(browser); });
-
-  if (m_BrowserList.empty())
-  {
-    CefQuitMessageLoop();
-  }
 }
 
 auto MyClient::ShowMainWindow() -> void
@@ -97,4 +66,49 @@ auto MyClient::CloseAllBrowsers(const bool isForceClose) -> void
 auto MyClient::IsClosing() const -> bool
 {
   return m_isClosing;
+}
+
+// CefLifeSpanHandler
+void MyClient::OnAfterCreated(CefRefPtr<CefBrowser> browser)
+{
+  CEF_REQUIRE_UI_THREAD();
+  m_BrowserList.push_back(browser);
+}
+
+// CefLifeSpanHandler
+bool MyClient::DoClose(CefRefPtr<CefBrowser> browser)
+{
+  CEF_REQUIRE_UI_THREAD();
+
+  if (m_BrowserList.size() == 1)
+  {
+    m_isClosing = true;
+  }
+
+  return false;
+}
+
+// CefLifeSpanHandler
+void MyClient::OnBeforeClose(CefRefPtr<CefBrowser> browser)
+{
+  CEF_REQUIRE_UI_THREAD();
+
+  std::erase_if(m_BrowserList, [&browser](const CefRefPtr<CefBrowser>& brow) { return brow->IsSame(browser); });
+
+  if (m_BrowserList.empty())
+  {
+    CefQuitMessageLoop();
+  }
+}
+
+// CefDisplayHandler
+void MyClient::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title)
+{
+#if defined(_WIN32)
+  HWND handle = browser->GetHost()->GetWindowHandle();
+  if (handle)
+  {
+    ::SetWindowTextW(handle, title.ToWString().c_str());
+  }
+#endif
 }

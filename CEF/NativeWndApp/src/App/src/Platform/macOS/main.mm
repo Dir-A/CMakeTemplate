@@ -97,20 +97,14 @@ int main(int argc, char* argv[])
   {
     [SimpleApplication sharedApplication];
     CHECK([NSApp isKindOfClass:[SimpleApplication class]]);
-
-    CefRefPtr<CefCommandLine> command_line = CefCommandLine::CreateCommandLine();
-    command_line->InitFromArgv(argc, argv);
-
+    
     CefSettings settings;
-    settings.no_sandbox = true;
 
     SimpleAppDelegate* delegate = [[SimpleAppDelegate alloc] init];
     NSApp.delegate = delegate;
     [delegate performSelectorOnMainThread:@selector(createApplication:) withObject:nil waitUntilDone:NO];
 
-    CefInitialize(CefMainArgs{argc, argv}, settings, new MyApp, nullptr);
-    CefRunMessageLoop();
-    CefShutdown();
+    const auto ret = AppMain(CefMainArgs{ argc, argv }, settings);
 
 #if !__has_feature(objc_arc)
     [delegate release];
@@ -118,5 +112,5 @@ int main(int argc, char* argv[])
     delegate = nil;
   }  // @autoreleasepool
 
-  return 0;
+  return ret;
 }
