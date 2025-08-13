@@ -21,6 +21,7 @@ auto AppMain(const CefMainArgs& rfArgs, CefSettings& rfSettings) -> int
       MyClient::GetInstance()->SetRenderer(&renderer);
       {
         auto browser = MyClient::GetInstance()->GetMainBrowser();
+        browser->GetHost()->SetWindowlessFrameRate(renderer.GetFrameRate());
         renderer.Run(browser);
         browser->GetHost()->CloseBrowser(true);
         // invoke CloseBrowser to remove self from the m_BrowserList of MyClient, otherwise the iterator will become invalid during invoke CloseAllBrowsers iteration process.

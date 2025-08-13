@@ -1,12 +1,17 @@
 #include "SdlRenderer.hpp"
 #include "include/cef_app.h"
+#include <algorithm>
 
 SdlRenderer::SdlRenderer()
 {
   SDL_Init(SDL_INIT_EVERYTHING);
   m_pWindow = SDL_CreateWindow("CEF OSR", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_nWidth, m_nHeigh, SDL_WINDOW_RESIZABLE);
-  m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); // NOLINT
+  m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC); // NOLINT
   m_pTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, m_nWidth, m_nHeigh);
+
+  SDL_DisplayMode current_mode;
+  SDL_GetCurrentDisplayMode(SDL_GetWindowDisplayIndex(m_pWindow), &current_mode);
+  m_nFrameRate = std::min(current_mode.refresh_rate, 120);
 }
 
 SdlRenderer::~SdlRenderer()
@@ -113,16 +118,19 @@ void SdlRenderer::HandleMouseEvent(SDL_Event& rfEvent, const CefRefPtr<CefBrowse
 
 void SdlRenderer::HanldeWindwEvent(SDL_Event& rfEvent, const CefRefPtr<CefBrowser>& rfBrowser)
 {
-  if (rfEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+  switch (rfEvent.window.event)
   {
-    {
-      std::scoped_lock lock{ m_Mutex };
-      m_nWidth = rfEvent.window.data1;
-      m_nHeigh = rfEvent.window.data2;
-      SDL_DestroyTexture(m_pTexture);
-      m_pTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, m_nWidth, m_nHeigh);
-    }
+  case SDL_WINDOWEVENT_RESIZED:
+  case SDL_WINDOWEVENT_SIZE_CHANGED: {
+    m_nWidth = rfEvent.window.data1;
+    m_nHeigh = rfEvent.window.data2;
+    SDL_DestroyTexture(m_pTexture);
+    m_pTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, m_nWidth, m_nHeigh);
     rfBrowser->GetHost()->WasResized();
+  }
+  break;
+  default:
+    break;
   }
 }
 
@@ -152,8 +160,20 @@ bool SdlRenderer::HandleEvent(const CefRefPtr<CefBrowser>& rfBrowser)
 
 void SdlRenderer::Run(const CefRefPtr<CefBrowser>& rfBrowser)
 {
-  while (this->HandleEvent(rfBrowser))
+  Uint32 frame_beg{};
+  Uint32 frame_end{};
+  Uint32 frame_time{};
+  const Uint32 frame_delay = 1000 / m_nFrameRate;
+
+  while (true)
   {
+    frame_beg = SDL_GetTicks();
+
+    if (!this->HandleEvent(rfBrowser))
+    {
+      break;
+    }
+
     CefDoMessageLoopWork();
 
     SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
@@ -163,6 +183,12 @@ void SdlRenderer::Run(const CefRefPtr<CefBrowser>& rfBrowser)
     SDL_RenderCopy(m_pRenderer, m_pTexture, nullptr, &rect);
     SDL_RenderPresent(m_pRenderer);
 
-    SDL_Delay(16);
+    frame_end = SDL_GetTicks();
+
+    frame_time = frame_end - frame_beg;
+    if (frame_delay > frame_time)
+    {
+      SDL_Delay(frame_delay - frame_time);
+    }
   }
 }

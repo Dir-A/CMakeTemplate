@@ -12,7 +12,7 @@ private:
   SDL_Event m_Event{};
   int m_nWidth{ 1920 };
   int m_nHeigh{ 1080 };
-  std::mutex m_Mutex;
+  int m_nFrameRate{ 60 };
 
 public:
   SdlRenderer();
@@ -33,5 +33,6 @@ private:
   bool HandleEvent(const CefRefPtr<CefBrowser>& rfBrowser);
 
 public:
+  int GetFrameRate() const { return m_nFrameRate; }
   void Run(const CefRefPtr<CefBrowser>& rfBrowser);
 };

@@ -12,6 +12,7 @@ Diagnostics:
           - modernize-avoid-c-arrays
           - modernize-use-trailing-return-type
           - modernize-use-std-print
+          - modernize-use-nodiscard
           - misc-misplaced-const
           - readability-magic-numbers
           - readability-avoid-const-params-in-decls
