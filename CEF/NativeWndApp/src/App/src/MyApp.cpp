@@ -17,7 +17,7 @@ void MyApp::OnContextInitialized()
   CEF_REQUIRE_UI_THREAD();
   CefBrowserSettings browser_settings;
   const auto client = this->GetDefaultClient();
-  const auto url = "https://www.baidu.com/";
+  const auto url = "https://vuejs.org/";
 
   CefRefPtr<CefBrowserViewDelegate> browser_view_delegate{ new MyBrowserViewDelegate{} };
   CefRefPtr<CefBrowserView> browser_view = CefBrowserView::CreateBrowserView(client, url, browser_settings, nullptr, nullptr, browser_view_delegate);
