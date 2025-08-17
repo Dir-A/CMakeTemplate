@@ -1,6 +1,6 @@
 #include "MyWndDelegate.hpp"
 
-MyWndDelegate::MyWndDelegate(CefRefPtr<CefBrowserView>& browser_view, const bool isDevtools)
+MyWndDelegate::MyWndDelegate(const CefRefPtr<CefBrowserView>& browser_view, const bool isDevtools)
     : m_isDevtools{ isDevtools }, m_BrowserView{ browser_view }
 {
 }
@@ -8,7 +8,6 @@ MyWndDelegate::MyWndDelegate(CefRefPtr<CefBrowserView>& browser_view, const bool
 void MyWndDelegate::OnWindowCreated(CefRefPtr<CefWindow> window)
 {
   window->AddChildView(m_BrowserView);
-  window->CenterWindow(CefSize{ 1920, 1080 });
   window->Show();
 }
 

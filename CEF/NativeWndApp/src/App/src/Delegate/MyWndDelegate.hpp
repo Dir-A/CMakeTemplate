@@ -13,13 +13,14 @@ private:
 
 public:
   MyWndDelegate() = delete;
-  MyWndDelegate(CefRefPtr<CefBrowserView>& browser_view, const bool isDevtools = false);
+  MyWndDelegate(const CefRefPtr<CefBrowserView>& browser_view, const bool isDevtools = false);
   MyWndDelegate(const MyWndDelegate&) = delete;
   MyWndDelegate(MyWndDelegate&&) noexcept = delete;
   MyWndDelegate& operator=(const MyWndDelegate&) = delete;
   MyWndDelegate& operator=(MyWndDelegate&&) noexcept = delete;
   virtual ~MyWndDelegate() = default;
 
+  // CefWindowDelegate
 public:
   void OnWindowCreated(CefRefPtr<CefWindow> window) override;
   void OnWindowDestroyed(CefRefPtr<CefWindow> window) override;

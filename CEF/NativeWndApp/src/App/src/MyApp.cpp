@@ -3,6 +3,7 @@
 #include "Delegate/MyWndDelegate.hpp"
 #include "Delegate/MyBrowserViewDelegate.hpp"
 
+#include "include/internal/cef_ptr.h"
 #include "include/wrapper/cef_helpers.h"
 
 // CefBrowserProcessHandler
@@ -19,10 +20,9 @@ void MyApp::OnContextInitialized()
   const auto client = this->GetDefaultClient();
   const auto url = "https://vuejs.org/";
 
-  CefRefPtr<CefBrowserViewDelegate> browser_view_delegate{ new MyBrowserViewDelegate{} };
-  CefRefPtr<CefBrowserView> browser_view = CefBrowserView::CreateBrowserView(client, url, browser_settings, nullptr, nullptr, browser_view_delegate);
-  CefRefPtr<CefWindowDelegate> wnd_delegate{ new MyWndDelegate{ browser_view } };
-  CefWindow::CreateTopLevelWindow(wnd_delegate);
+  const auto browser_view = CefBrowserView::CreateBrowserView(client, url, browser_settings, nullptr, nullptr, new MyBrowserViewDelegate{});
+  const auto cef_window = CefWindow::CreateTopLevelWindow(new MyWndDelegate{ browser_view });
+  cef_window->CenterWindow({ 1920, 1080 });
 }
 
 // CefBrowserProcessHandler
