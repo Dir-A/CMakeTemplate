@@ -7,6 +7,11 @@
 #include "AppMain.hpp"
 #include "MyClient.hpp"
 
+@interface SimpleAppDelegate : NSObject <NSApplicationDelegate>
+
+- (void)createApplication:(id)object;
+- (void)tryToTerminateApplication:(NSApplication*)app;
+@end
 
 @interface SimpleApplication : NSApplication <CefAppProtocol> 
 {
@@ -38,12 +43,6 @@
 }
 @end // SimpleApplication
 
-
-@interface SimpleAppDelegate : NSObject <NSApplicationDelegate>
-
-- (void)createApplication:(id)object;
-- (void)tryToTerminateApplication:(NSApplication*)app;
-@end
 
 @implementation SimpleAppDelegate
 
