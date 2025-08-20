@@ -8,7 +8,7 @@ private:
   IMPLEMENT_REFCOUNTING(MyWndDelegate);
 
 private:
-  bool m_isDevtools;
+  [[maybe_unused]] bool m_isDevtools;
   CefRefPtr<CefBrowserView> m_BrowserView;
 
 public:
