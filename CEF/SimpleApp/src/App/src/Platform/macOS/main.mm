@@ -1,17 +1,11 @@
 #import <Cocoa/Cocoa.h>
 
 #include "include/cef_application_mac.h"
-#include "include/cef_command_line.h"
 #include "include/wrapper/cef_helpers.h"
 #include "include/wrapper/cef_library_loader.h"
-#include "MyApp.hpp"
+
+#include "AppMain.hpp"
 #include "MyClient.hpp"
-
-@interface SimpleAppDelegate : NSObject <NSApplicationDelegate>
-
-- (void)createApplication:(id)object;
-- (void)tryToTerminateApplication:(NSApplication*)app;
-@end
 
 
 @interface SimpleApplication : NSApplication <CefAppProtocol> 
@@ -20,7 +14,6 @@
   BOOL handlingSendEvent_;
 }
 @end
-
 
 @implementation SimpleApplication
 - (BOOL)isHandlingSendEvent {
@@ -45,6 +38,12 @@
 }
 @end // SimpleApplication
 
+
+@interface SimpleAppDelegate : NSObject <NSApplicationDelegate>
+
+- (void)createApplication:(id)object;
+- (void)tryToTerminateApplication:(NSApplication*)app;
+@end
 
 @implementation SimpleAppDelegate
 
@@ -93,6 +92,8 @@ int main(int argc, char* argv[])
     return 1;
   }
 
+  int ret{};
+
   @autoreleasepool 
   {
     [SimpleApplication sharedApplication];
@@ -104,7 +105,7 @@ int main(int argc, char* argv[])
     NSApp.delegate = delegate;
     [delegate performSelectorOnMainThread:@selector(createApplication:) withObject:nil waitUntilDone:NO];
 
-    const auto ret = AppMain(CefMainArgs{ argc, argv }, settings);
+    ret = AppMain(CefMainArgs{ argc, argv }, settings);
 
 #if !__has_feature(objc_arc)
     [delegate release];
