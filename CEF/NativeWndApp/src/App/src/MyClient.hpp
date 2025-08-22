@@ -2,7 +2,7 @@
 #include "include/cef_client.h"
 #include <list>
 
-class MyClient : public CefClient, CefLifeSpanHandler, CefDisplayHandler
+class MyClient : public CefClient, CefLifeSpanHandler
 {
 private:
   IMPLEMENT_REFCOUNTING(MyClient);
@@ -38,9 +38,4 @@ public:
   void OnAfterCreated(CefRefPtr<CefBrowser> browser) override;
   bool DoClose(CefRefPtr<CefBrowser> browser) override;
   void OnBeforeClose(CefRefPtr<CefBrowser> browser) override;
-
-  // CefDisplayHandler
-public:
-  CefRefPtr<CefDisplayHandler> GetDisplayHandler() override { return this; }
-  void OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title) override;
 };

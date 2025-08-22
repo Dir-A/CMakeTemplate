@@ -23,6 +23,7 @@ void MyApp::OnContextInitialized()
   const auto browser_view = CefBrowserView::CreateBrowserView(client, url, browser_settings, nullptr, nullptr, new MyBrowserViewDelegate{});
   const auto cef_window = CefWindow::CreateTopLevelWindow(new MyWndDelegate{ browser_view });
   cef_window->CenterWindow({ 1920, 1080 });
+  cef_window->SetTitle("My Native Window App");
 }
 
 // CefBrowserProcessHandler

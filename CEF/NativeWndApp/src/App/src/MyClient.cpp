@@ -100,15 +100,3 @@ void MyClient::OnBeforeClose(CefRefPtr<CefBrowser> browser)
     CefQuitMessageLoop();
   }
 }
-
-// CefDisplayHandler
-void MyClient::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title)
-{
-#if defined(_WIN32)
-  HWND handle = browser->GetHost()->GetWindowHandle();
-  if (handle)
-  {
-    ::SetWindowTextW(handle, title.ToWString().c_str());
-  }
-#endif
-}
