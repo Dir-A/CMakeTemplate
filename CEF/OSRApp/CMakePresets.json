@@ -136,8 +136,7 @@
             "displayName": "Windows MSVC x86-64 MinSizeRel",
             "inherits": "windows-msvc-x86-64-release",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "MinSizeRel",
-                "VCPKG_TARGET_TRIPLET": "x64-windows"
+                "CMAKE_BUILD_TYPE": "MinSizeRel"
             }
         },
         {
@@ -154,8 +153,7 @@
             "displayName": "Windows MSVC x86-64 RelWithDebInfo",
             "inherits": "windows-msvc-x86-64-release",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "VCPKG_TARGET_TRIPLET": "x64-windows"
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
             }
         },
         {
@@ -216,6 +214,84 @@
             }
         },
         {
+            "name": "windows-msvc-arm64-debug",
+            "displayName": "Windows MSVC ARM64 Debug",
+            "inherits": "windows-msvc-base",
+            "architecture": {
+                "value": "ARM64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "VCPKG_TARGET_TRIPLET": "arm64-windows"
+            }
+        },
+        {
+            "name": "windows-msvc-arm64-debug-mt",
+            "displayName": "Windows MSVC ARM64 Debug MT",
+            "inherits": "windows-msvc-arm64-debug",
+            "cacheVariables": {
+                "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug",
+                "VCPKG_TARGET_TRIPLET": "arm64-windows-static"
+            }
+        },
+        {
+            "name": "windows-msvc-arm64-release",
+            "displayName": "Windows MSVC ARM64 Release",
+            "inherits": "windows-msvc-base",
+            "architecture": {
+                "value": "ARM64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "VCPKG_TARGET_TRIPLET": "arm64-windows"
+            }
+        },
+        {
+            "name": "windows-msvc-arm64-release-mt",
+            "displayName": "Windows MSVC ARM64 Release MT",
+            "inherits": "windows-msvc-arm64-release",
+            "cacheVariables": {
+                "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
+                "VCPKG_TARGET_TRIPLET": "arm64-windows-static"
+            }
+        },
+        {
+            "name": "windows-msvc-arm64-minsizerel",
+            "displayName": "Windows MSVC ARM64 MinSizeRel",
+            "inherits": "windows-msvc-arm64-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "MinSizeRel"
+            }
+        },
+        {
+            "name": "windows-msvc-arm64-minsizerel-mt",
+            "displayName": "Windows MSVC ARM64 MinSizeRel MT",
+            "inherits": "windows-msvc-arm64-release-mt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "MinSizeRel",
+                "VCPKG_TARGET_TRIPLET": "arm64-windows-static"
+            }
+        },
+        {
+            "name": "windows-msvc-arm64-relwithdebinfo",
+            "displayName": "Windows MSVC ARM64 RelWithDebInfo",
+            "inherits": "windows-msvc-arm64-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+        {
+            "name": "windows-msvc-arm64-relwithdebinfo-mt",
+            "displayName": "Windows MSVC ARM64 RelWithDebInfo NT",
+            "inherits": "windows-msvc-arm64-release-mt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "VCPKG_TARGET_TRIPLET": "arm64-windows-static"
+            }
+        },
+        {
             "name": "linux-gcc-x86-64-debug",
             "displayName": "Linux GCC x86-64 Debug",
             "inherits": "linux-gcc-base",
@@ -244,11 +320,12 @@
             "displayName": "MacOS Clang x86-64 Debug",
             "inherits": "macos-clang-base",
             "architecture": {
-                "value": "x64",
+                "value": "x86_64",
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_OSX_ARCHITECTURES": "x86_64"
             }
         },
         {
@@ -256,11 +333,38 @@
             "displayName": "MacOS Clang x86-64 Release",
             "inherits": "macos-clang-base",
             "architecture": {
-                "value": "x64",
+                "value": "x86_64",
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_OSX_ARCHITECTURES": "x86_64"
+            }
+        },
+        {
+            "name": "macos-clang-arm64-debug",
+            "displayName": "MacOS Clang ARM64 Debug",
+            "inherits": "macos-clang-base",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_OSX_ARCHITECTURES": "arm64"
+            }
+        },
+        {
+            "name": "macos-clang-arm64-release",
+            "displayName": "MacOS Clang ARM64 Release",
+            "inherits": "macos-clang-base",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_OSX_ARCHITECTURES": "arm64"
             }
         },
         {
