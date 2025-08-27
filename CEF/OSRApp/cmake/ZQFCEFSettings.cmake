@@ -4,8 +4,9 @@ set(CEF_EXTRACT_DIR "${CMAKE_BINARY_DIR}/cef_ext")
 set(CEF_ROOT "${CMAKE_BINARY_DIR}/cef_bin")
 
 # Config Donwload Info
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
+if((CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64") OR (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64|AMD64"))
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(PROJECT_ARCH "x86_64")
     if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
       set(CEF_DOWNLOAD_TYPE "windows64")
       set(CEF_DOWNLOAD_SHA1 "c0954e75eb0b3091535d2314896f40357c9d99d8")
@@ -14,13 +15,19 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
       set(CEF_DOWNLOAD_SHA1 "43f3ca820b4aac464b0c5125e3df05edf36532c3")
     elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
       set(CEF_DOWNLOAD_TYPE "macosx64")
-      set(CEF_DOWNLOAD_SHA1 "0cee64095113bdaf4ce26056ba22ec6d0218e32b") 
+      set(CEF_DOWNLOAD_SHA1 "0cee64095113bdaf4ce26056ba22ec6d0218e32b")
     endif()
   endif()
-elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64|ARM64")
+elseif((CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64|ARM64") OR (CMAKE_OSX_ARCHITECTURES MATCHES "arm64"))
+  set(PROJECT_ARCH "arm64")
   if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(CEF_DOWNLOAD_TYPE "macosarm64")
-    set(CEF_DOWNLOAD_SHA1 "9adc8a60fdf04867ff9d5c6dbacca2be8feff3a0") 
+    set(CEF_DOWNLOAD_SHA1 "9adc8a60fdf04867ff9d5c6dbacca2be8feff3a0")
+  elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(CEF_DOWNLOAD_TYPE "windowsarm64")
+    set(CEF_DOWNLOAD_SHA1 "02fb4aa9293c9207dfa05d316464f2e8d8cdcb45")
+  else()
+    message(FATAL_ERROR "CEF: Config Download Failed: unknown arm64 system type")
   endif()
 else()
   message(FATAL_ERROR "CEF: Config Download Failed: unknown system type")
@@ -32,6 +39,7 @@ set(CEF_DOWNLOAD_URL "https://cef-builds.spotifycdn.com/cef_binary_138.0.23%2Bg2
 if(EXISTS "${CEF_DOWNLOAD_PATH}")
   file(SHA1 ${CEF_DOWNLOAD_PATH} CEF_PREBUILT_SHA1)
 endif()
+
 if(NOT CEF_PREBUILT_SHA1 STREQUAL CEF_DOWNLOAD_SHA1)
   message(STATUS "CEF: Start Download Pre-built: ${CEF_DOWNLOAD_URL}")
   file(DOWNLOAD ${CEF_DOWNLOAD_URL} ${CEF_DOWNLOAD_PATH} EXPECTED_HASH SHA1=${CEF_DOWNLOAD_SHA1} SHOW_PROGRESS STATUS CEF_DOWNLOAD_RESULT)
@@ -40,6 +48,7 @@ if(NOT CEF_PREBUILT_SHA1 STREQUAL CEF_DOWNLOAD_SHA1)
   if(CEF_DOWNLOAD_RESULT)
     list(GET CEF_DOWNLOAD_RESULT 0 status_code)
     list(GET CEF_DOWNLOAD_RESULT 1 status_message)
+
     if(NOT status_code EQUAL 0)
       message(FATAL_ERROR "CEF: Download Pre-built Failed: [${status_code}] ${status_message}")
     endif()
@@ -54,14 +63,16 @@ if(NOT EXISTS "${CEF_ROOT}")
 
   # Find Sub Dir
   file(GLOB FOUND_CEF_DIR_LIST LIST_DIRECTORIES true "${CEF_EXTRACT_DIR}/cef_binary_*")
+
   if(NOT FOUND_CEF_DIR_LIST)
     message(FATAL_ERROR "CEF: Could not find 'cef_binary_*' directory in temp folder.")
   endif()
+
   list(GET FOUND_CEF_DIR_LIST 0 FOUND_CEF_DIR_FIRST)
 
   # Rename to prevent long paths
   file(RENAME "${FOUND_CEF_DIR_FIRST}" "${CEF_ROOT}")
-  file(REMOVE_RECURSE "${CEF_EXTRACT_DIR}" )
+  file(REMOVE_RECURSE "${CEF_EXTRACT_DIR}")
 endif()
 
 # Custom CEF Settings
@@ -79,6 +90,7 @@ list(REMOVE_ITEM CEF_CXX_COMPILER_FLAGS "-fno-exceptions")
 list(REMOVE_ITEM CEF_COMPILER_FLAGS_RELEASE "/MT")
 list(REMOVE_ITEM CEF_COMPILER_FLAGS_DEBUG "/MTd")
 list(REMOVE_ITEM CEF_COMPILER_DEFINES "_HAS_EXCEPTIONS=0")
+
 if(MSVC)
   list(APPEND CEF_CXX_COMPILER_FLAGS "/EHsc")
 endif()
@@ -93,7 +105,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   add_library(CEF::CEF ALIAS cef_cef)
   target_link_libraries(cef_cef INTERFACE libcef_dll_wrapper ${CEF_STANDARD_LIBS})
 else()
-  # Add CEF C Libary Target 
+  # Add CEF C Libary Target
   ADD_LOGICAL_TARGET("libcef_lib" "${CEF_LIB_DEBUG}" "${CEF_LIB_RELEASE}")
 
   # Wrapper CEF C Library
