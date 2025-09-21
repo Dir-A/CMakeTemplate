@@ -1,0 +1,7 @@
+CompileFlags:
+  Add: ['/clang:-std=c++23', '/EHsc']
+
+Index:
+  Background: Skip
+
+
