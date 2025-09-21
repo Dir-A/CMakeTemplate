@@ -1,0 +1,17 @@
+{
+    "name": "vcpkg-overlay-ports",
+    "version": "1.0",
+    "dependencies": [
+        "nativefiledialog-extended"
+    ],
+    "vcpkg-configuration": {
+        "overlay-ports": [
+            "cmake/ports/"
+        ],
+        "default-registry": {
+            "kind": "git",
+            "repository": "https://github.com/Microsoft/vcpkg",
+            "baseline": "29ff5b8131d0c6c8fcb8fbaef35992f0d507cd7c"
+        }
+    }
+}

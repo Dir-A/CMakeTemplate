@@ -7,26 +7,25 @@
 #include <dxgi.h>
 #include <SDL_syswm.h>
 #pragma comment(lib, "d3d11.lib")
-#include <wrl/client.h>
-using Microsoft::WRL::ComPtr;
 #endif
 
 class SdlRenderer : public IRenderer
 {
 private:
   SDL_Window* m_pWindow{};
+  SDL_Renderer* m_pRenderer{};
+  SDL_Texture* m_pTexture{};
   SDL_Event m_Event{};
   int m_nWidth{ 1920 };
   int m_nHeigh{ 1080 };
   int m_nFrameRate{ 60 };
-
+  // Windows D3D specific
 #if defined(_WIN32)
-  ComPtr<ID3D11Device1> m_pDevice;
-  ComPtr<IDXGISwapChain> m_pSwapChain;
-  ComPtr<ID3D11RenderTargetView> m_pBackBufferRTV;
-  ComPtr<ID3D11Texture2D> m_pBackBufferTexture;
-  ComPtr<ID3D11Texture2D> m_pTextureD3D;
-  ComPtr<ID3D11DeviceContext> m_pDeviceContext;
+  IDXGISwapChain* m_pSwapChain{};
+  ID3D11RenderTargetView* m_pBackBufferRTV{};
+  ID3D11Texture2D* m_pBackBufferTexture{};
+  // shared texture opened from CEF
+  ID3D11Texture2D* m_pTextureD3D{};
   bool m_useD3DPresent{ false };
 #endif
 
@@ -38,7 +37,8 @@ public:
   SdlRenderer& operator=(SdlRenderer&&) noexcept = delete;
   virtual ~SdlRenderer();
 
-  void CreateD3DDevice(HWND hwnd);
+  // Open a shared texture handle (platform specific). On Windows this should
+  // be a HANDLE-compatible pointer provided by CEF's CefAcceleratedPaintInfo.
   void UpdateSharedTextureFromHandle(const void* shared_handle, int width, int height) override;
 
 protected:

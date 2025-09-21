@@ -1,0 +1,43 @@
+{
+  "name": "vcpkg-version-control",
+  "version": "1.0",
+  "dependencies": [
+    "fmt",
+    "sqlite3",
+    "boost-thread"
+  ],
+  "$note": "Specify an older version of sqlite3 and fmt",
+  "overrides": [
+    {
+      "name": "sqlite3",
+      "version": "3.47.1"
+    },
+    {
+      "name": "fmt",
+      "version": "8.1.0"
+    }
+  ],
+  "vcpkg-configuration": {
+    "$note": "overlay ports are used to fix compilation errors for older versions of Boost on the latest MSVC.",
+    "overlay-ports": [
+      "cmake/ports/"
+    ],
+    "default-registry": {
+      "kind": "git",
+      "repository": "https://github.com/Microsoft/vcpkg",
+      "baseline": "29ff5b8131d0c6c8fcb8fbaef35992f0d507cd7c"
+    },
+    "registries": [
+      {
+        "$note": "Specify an older version of boost",
+        "kind": "git",
+        "repository": "https://github.com/Microsoft/vcpkg",
+        "baseline": "cc471dc0f59b7b2066d6172c2893419412327a7a",
+        "packages": [
+          "boost",
+          "boost-*"
+        ]
+      }
+    ]
+  }
+}

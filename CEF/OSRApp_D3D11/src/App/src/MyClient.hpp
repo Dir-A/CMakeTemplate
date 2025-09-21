@@ -51,6 +51,9 @@ public:
   void OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList& dirtyRects, const void* buffer, int width, int height) override;
   void OnAcceleratedPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList& dirtyRects, const CefAcceleratedPaintInfo& info) override
   {
+    // Forward the platform-specific shared handle to the renderer which will
+    // open the shared resource and present it. This keeps D3D code inside the
+    // renderer implementation.
     if (m_pRenderer)
     {
       m_pRenderer->UpdateSharedTextureFromHandle(info.shared_texture_handle, m_pRenderer->GetWidth(), m_pRenderer->GetHeigh());

@@ -1,4 +1,0 @@
-The package ZxJson provides CMake targets:
-
-    find_package(Zut_ZxJson CONFIG REQUIRED)
-    target_link_libraries(main PRIVATE Zut::ZxJson)
