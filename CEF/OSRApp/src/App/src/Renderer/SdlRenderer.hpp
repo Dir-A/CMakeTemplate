@@ -1,34 +1,18 @@
 #pragma once
 #include <SDL.h>
+#include <mutex>
 #include "IRenderer.hpp"
-
-#if defined(_WIN32)
-#include <d3d11_1.h>
-#include <dxgi.h>
-#include <SDL_syswm.h>
-#pragma comment(lib, "d3d11.lib")
-#include <wrl/client.h>
-using Microsoft::WRL::ComPtr;
-#endif
 
 class SdlRenderer : public IRenderer
 {
 private:
   SDL_Window* m_pWindow{};
+  SDL_Renderer* m_pRenderer{};
+  SDL_Texture* m_pTexture{};
   SDL_Event m_Event{};
   int m_nWidth{ 1920 };
   int m_nHeigh{ 1080 };
   int m_nFrameRate{ 60 };
-
-#if defined(_WIN32)
-  ComPtr<ID3D11Device1> m_pDevice;
-  ComPtr<IDXGISwapChain> m_pSwapChain;
-  ComPtr<ID3D11RenderTargetView> m_pBackBufferRTV;
-  ComPtr<ID3D11Texture2D> m_pBackBufferTexture;
-  ComPtr<ID3D11Texture2D> m_pTextureD3D;
-  ComPtr<ID3D11DeviceContext> m_pDeviceContext;
-  bool m_useD3DPresent{ false };
-#endif
 
 public:
   SdlRenderer();
@@ -37,9 +21,6 @@ public:
   SdlRenderer& operator=(const SdlRenderer&) = delete;
   SdlRenderer& operator=(SdlRenderer&&) noexcept = delete;
   virtual ~SdlRenderer();
-
-  void CreateD3DDevice(HWND hwnd);
-  void UpdateSharedTextureFromHandle(const void* shared_handle, int width, int height) override;
 
 protected:
   int GetWidth() override { return m_nWidth; }

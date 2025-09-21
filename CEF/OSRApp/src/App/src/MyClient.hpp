@@ -49,11 +49,4 @@ public:
   CefRefPtr<CefRenderHandler> GetRenderHandler() override { return this; }
   void GetViewRect(CefRefPtr<CefBrowser> browser, CefRect& rect) override;
   void OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList& dirtyRects, const void* buffer, int width, int height) override;
-  void OnAcceleratedPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList& dirtyRects, const CefAcceleratedPaintInfo& info) override
-  {
-    if (m_pRenderer)
-    {
-      m_pRenderer->UpdateSharedTextureFromHandle(info.shared_texture_handle, m_pRenderer->GetWidth(), m_pRenderer->GetHeigh());
-    }
-  }
 };

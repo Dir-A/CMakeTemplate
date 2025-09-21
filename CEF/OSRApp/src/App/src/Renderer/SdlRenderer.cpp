@@ -1,22 +1,13 @@
 #include "SdlRenderer.hpp"
 #include "include/cef_app.h"
 #include <algorithm>
-#include <stdexcept>
-#include <vector>
-#include <windef.h>
 
 SdlRenderer::SdlRenderer()
 {
   SDL_Init(SDL_INIT_EVERYTHING);
   m_pWindow = SDL_CreateWindow("CEF OSR", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_nWidth, m_nHeigh, SDL_WINDOW_RESIZABLE);
-#if defined(_WIN32)
-  SDL_SysWMinfo wmInfo{}; // NOLINT
-  SDL_VERSION(&wmInfo.version);
-  if (SDL_GetWindowWMInfo(m_pWindow, &wmInfo))
-  {
-    this->CreateD3DDevice(wmInfo.info.win.window); // NOLINT
-  }
-#endif
+  m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC); // NOLINT
+  m_pTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, m_nWidth, m_nHeigh);
 
   SDL_DisplayMode current_mode;
   SDL_GetCurrentDisplayMode(SDL_GetWindowDisplayIndex(m_pWindow), &current_mode);
@@ -25,104 +16,23 @@ SdlRenderer::SdlRenderer()
 
 SdlRenderer::~SdlRenderer()
 {
+  SDL_DestroyTexture(m_pTexture);
+  SDL_DestroyRenderer(m_pRenderer);
   SDL_DestroyWindow(m_pWindow);
 }
 
 void SdlRenderer::UpdateTexture(const std::vector<CefRect>& dirtyRects, const void* buffer, int width, int height)
 {
-  // CPU path removed - renderer uses GPU present only.
-  (void)dirtyRects;
-  (void)buffer;
-  (void)width;
-  (void)height;
+  int pitch{};
+  void* texture_pixels{};
+  if (SDL_LockTexture(m_pTexture, nullptr, &texture_pixels, &pitch) != 0)
+  {
+    return;
+  }
+
+  std::memcpy(texture_pixels, buffer, width * height * 4);
+  SDL_UnlockTexture(m_pTexture);
 }
-
-#if defined(_WIN32)
-
-void SdlRenderer::CreateD3DDevice(HWND hwnd)
-{
-  ComPtr<ID3D11Device> base_device;
-  D3D_FEATURE_LEVEL feature_levels[]{ D3D_FEATURE_LEVEL_11_0 };                                                                                                                                                                                                                                  // NOLINT
-  const HRESULT hres = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_SINGLETHREADED, feature_levels, ARRAYSIZE(feature_levels), D3D11_SDK_VERSION, base_device.GetAddressOf(), nullptr, m_pDeviceContext.GetAddressOf()); // NOLINT
-  if (FAILED(hres))
-  {
-    return;
-  }
-
-  const auto hres_2 = base_device.As(&m_pDevice);
-  if (FAILED(hres_2) || !m_pDevice)
-  {
-    return;
-  }
-
-  ComPtr<IDXGIDevice> dxgi_device;
-  if (FAILED(m_pDevice.As(&dxgi_device)))
-  {
-    return;
-  }
-
-  ComPtr<IDXGIAdapter> adapter;
-  if (FAILED(dxgi_device->GetAdapter(adapter.GetAddressOf())))
-  {
-    return;
-  }
-
-  ComPtr<IDXGIFactory> factory;
-  if (FAILED(adapter->GetParent(__uuidof(IDXGIFactory), (void**)factory.GetAddressOf()))) // NOLINT
-  {
-    return;
-  }
-
-  DXGI_SWAP_CHAIN_DESC dxgi_sd{};
-  dxgi_sd.BufferCount = 1;
-  dxgi_sd.BufferDesc.Width = m_nWidth;
-  dxgi_sd.BufferDesc.Height = m_nHeigh;
-  dxgi_sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-  dxgi_sd.BufferDesc.RefreshRate.Numerator = 0;
-  dxgi_sd.BufferDesc.RefreshRate.Denominator = 1;
-  dxgi_sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-  dxgi_sd.OutputWindow = hwnd;
-  dxgi_sd.SampleDesc.Count = 1;
-  dxgi_sd.Windowed = TRUE;
-  dxgi_sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
-  if (FAILED(factory->CreateSwapChain(m_pDevice.Get(), &dxgi_sd, m_pSwapChain.GetAddressOf())))
-  {
-    return;
-  }
-
-  if (FAILED(m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)m_pBackBufferTexture.GetAddressOf()))) // NOLINT
-  {
-    return;
-  }
-
-  m_pDevice->CreateRenderTargetView(m_pBackBufferTexture.Get(), nullptr, m_pBackBufferRTV.GetAddressOf());
-
-  m_useD3DPresent = true;
-}
-
-void SdlRenderer::UpdateSharedTextureFromHandle(const void* shared_handle, int width, int height)
-{
-  if (!shared_handle)
-  {
-    return;
-  }
-
-  if ((width != m_nWidth) || (height != m_nHeigh))
-  {
-    return;
-  }
-
-  ComPtr<ID3D11Texture2D> opened_texture;
-  const auto hres = m_pDevice->OpenSharedResource1(const_cast<void*>(shared_handle), __uuidof(ID3D11Texture2D), (void**)opened_texture.GetAddressOf()); // NOLINT
-  if (FAILED(hres) || !opened_texture)
-  {
-    return;
-  }
-
-  m_pTextureD3D = opened_texture;
-}
-#endif
 
 void SdlRenderer::HandleMouseEvent(SDL_Event& rfEvent, const CefRefPtr<CefBrowser>& rfBrowser)
 {
@@ -214,6 +124,8 @@ void SdlRenderer::HanldeWindwEvent(SDL_Event& rfEvent, const CefRefPtr<CefBrowse
   case SDL_WINDOWEVENT_SIZE_CHANGED: {
     m_nWidth = rfEvent.window.data1;
     m_nHeigh = rfEvent.window.data2;
+    SDL_DestroyTexture(m_pTexture);
+    m_pTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, m_nWidth, m_nHeigh);
     rfBrowser->GetHost()->WasResized();
   }
   break;
@@ -264,14 +176,12 @@ void SdlRenderer::Run(const CefRefPtr<CefBrowser>& rfBrowser)
 
     CefDoMessageLoopWork();
 
-#if defined(_WIN32)
-    if (m_useD3DPresent && m_pTextureD3D)
-    {
-      m_pDeviceContext->CopyResource(m_pBackBufferTexture.Get(), m_pTextureD3D.Get());
-      m_pSwapChain->Present(1, 0);
-      m_pTextureD3D.Reset();
-    }
-#endif
+    SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
+    SDL_RenderClear(m_pRenderer);
+
+    SDL_Rect rect{ 0, 0, m_nWidth, m_nHeigh };
+    SDL_RenderCopy(m_pRenderer, m_pTexture, nullptr, &rect);
+    SDL_RenderPresent(m_pRenderer);
 
     frame_end = SDL_GetTicks();
 

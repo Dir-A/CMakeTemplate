@@ -16,7 +16,7 @@ void MyApp::OnContextInitialized()
   CefBrowserSettings browser_settings;
 
   CefWindowInfo window_info;
-  window_info.shared_texture_enabled = 1;
+  window_info.shared_texture_enabled = 0;
   window_info.SetAsWindowless(0);
 
   const auto client = this->GetDefaultClient();
