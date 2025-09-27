@@ -12,7 +12,9 @@
       "binaryDir": "${sourceDir}/.build/${presetName}",
       "installDir": "${sourceDir}/.install/${presetName}",
       "cacheVariables": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": true
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+        "VCPKG_INSTALL_OPTIONS":"--no-print-usage",
+        "ZQF_VCPKG": true
       }
     },
     {

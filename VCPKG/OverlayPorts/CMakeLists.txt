@@ -7,8 +7,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib/")
 
 # VCPKG
-include("cmake/ZQF_VCPKG.cmake")
-zqf_vcpkg_startup()
+if(ZQF_VCPKG)
+  include("cmake/ZQF_VCPKG.cmake")
+  zqf_vcpkg_startup()
+endif()
 
 # Project Name
 project("OverlayPorts" VERSION 1.0 LANGUAGES C CXX)
