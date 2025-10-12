@@ -1,13 +1,17 @@
-# MySayHello
 cmake_minimum_required(VERSION 3.25)
 
+# VCPKG
+if(ZQF_VCPKG)
+  include("cmake/ZQF_VCPKG.cmake")
+  zqf_vcpkg_startup()
+endif()
+
 # Project Name
-project("MySayHello" VERSION 1.0 LANGUAGES C CXX)
+project("WebView2_Material" VERSION 1.0 LANGUAGES C CXX)
 
-# Project Settings
-include("cmake/ZQFSettings.cmake")
-
-add_compile_options($<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/P>)
+# Modules
+find_package(zqf_cmake_modules CONFIG REQUIRED)
+include("ZQF_Settings")
 
 # Set Executable
 add_executable(${PROJECT_NAME} "src/main.cpp")
@@ -18,3 +22,6 @@ target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CX
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/W4>)
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>)
 
+# External Packages
+find_package(unofficial-webview2 CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE unofficial::webview2::webview2)

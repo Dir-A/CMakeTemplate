@@ -1,0 +1,18 @@
+# CMake
+.build/
+.install/
+
+# Xmake
+.xmake/
+vsxmake2022/
+
+# VS
+.vs/
+
+# VSCode
+.vscode/.cache/
+.vscode/compile_commands.json
+
+# MacOS
+.DS_Store
+
