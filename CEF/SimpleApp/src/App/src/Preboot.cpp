@@ -3,7 +3,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <filesystem>
-#elif __liunx__
+#elif __linux__
 #include <filesystem>
 #elif __APPLE__
 #include "include/cef_application_mac.h"
@@ -28,7 +28,7 @@ Preboot::Preboot([[maybe_unused]] const int argc, [[maybe_unused]] char** argv)
 
   this->args = CefMainArgs{ ::GetModuleHandleW(nullptr) };
   CefString(&this->settings.browser_subprocess_path) = (current_dir / L"CEFRuntime/CEFRuntime.exe").native();
-#elif __liunx__
+#elif __linux__
   this->args = CefMainArgs{ argc, argv };
   CefString(&this->settings.browser_subprocess_path) = (std::filesystem::current_path() / "CEFRuntime/CEFRuntime").c_str();
 #elif __APPLE__
