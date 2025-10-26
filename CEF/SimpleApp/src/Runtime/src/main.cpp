@@ -1,6 +1,6 @@
 #if defined(_WIN32)
+#include <Windows.h>
 #include "include/capi/cef_app_capi.h"
-#include <minwindef.h>
 
 INT APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR, _In_ INT)
 {
@@ -31,9 +31,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  CefMainArgs main_args(argc, argv);
-
-  return CefExecuteProcess(main_args, nullptr, nullptr);
+  return CefExecuteProcess(CefMainArgs{ argc, argv }, nullptr, nullptr);
 }
 
 #endif

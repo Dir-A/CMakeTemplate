@@ -1,52 +1,38 @@
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+if(CMAKE_SYSTEM_NAME MATCHES "Windows|Linux")
   # Project
-  project(${MY_CEF_RUNTIME_NAME} VERSION 1.0 LANGUAGES C CXX)
-  
+  project(CEFRuntime VERSION 1.0 LANGUAGES C CXX)
+
   # Executable
-  add_executable(${PROJECT_NAME} "src/main.cpp" "res/compatibility.manifest")
+  add_executable(${PROJECT_NAME} "src/main.cpp" $<$<PLATFORM_ID:Windows>:res/compatibility.manifest>)
+
+  # Compiler
   target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
   target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/utf-8>)
+
+  # Warning
   target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/W4>)
   target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>)
-  target_link_libraries(${PROJECT_NAME} PRIVATE CEF::LIB)
-  CEF_SET_EXECUTABLE_TARGET_PROPERTIES(${PROJECT_NAME})
+  target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:CLANG>,$<CXX_COMPILER_ID:CLANG>>:-Wall -Wextra>)
+
+  # External Libraries
+  find_package(zqf_cef_prebuilt CONFIG REQUIRED)
+  zqf_cef_config(${PROJECT_NAME})
+  zqf_cef_copyfiles(${PROJECT_NAME})
+  target_link_libraries(${PROJECT_NAME} PRIVATE ZQF::CEF::CLibrary)
 
   # Properties
-  set(CEF_TARGET_OUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}")
-  set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CEF_TARGET_OUT_DIR}")
-  set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
+  set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+  set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH "$ORIGIN")
 
-  # Copy Runtime Files
-  CEF_COPY_FILES(${PROJECT_NAME} "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" "${CEF_TARGET_OUT_DIR}")
-  CEF_COPY_FILES(${PROJECT_NAME} "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" "${CEF_TARGET_OUT_DIR}")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  # Project
-  project(${MY_CEF_RUNTIME_NAME} VERSION 1.0 LANGUAGES C CXX)
-
-  # Executable
-  add_executable(${PROJECT_NAME} "src/main.cpp")
-  target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
-  target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>)
-  target_link_libraries(${PROJECT_NAME} PRIVATE CEF::LIB)
-  CEF_SET_EXECUTABLE_TARGET_PROPERTIES(${PROJECT_NAME})
-
-  # Properties
-  set(CEF_TARGET_OUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}")
-  set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CEF_TARGET_OUT_DIR}")
-
-  # Set rpath so that libraries can be placed next to the executable.
-  set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN")
-  set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
-  set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CEF_TARGET_OUT_DIR}")
-
-  # Copy Runtime Files
-  CEF_COPY_FILES(${PROJECT_NAME} "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" "${CEF_TARGET_OUT_DIR}")
-  CEF_COPY_FILES(${PROJECT_NAME} "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" "${CEF_TARGET_OUT_DIR}")
-  if (EXISTS "${CEF_BINARY_DIR}/libminigbm.so")
-    CEF_COPY_FILES(${PROJECT_NAME} "libminigbm.so" "${CEF_BINARY_DIR}" "${CEF_TARGET_OUT_DIR}")
+  if(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/CEFRuntime/")
+  else()
+    set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "CEFRuntime/")
   endif()
+
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   set(CEF_TARGET_NAME ${MY_CEF_APP_NAME})
+
   # Variables referenced from the main Info.plist file.
   set(EXECUTABLE_NAME "${CEF_TARGET_NAME}")
   set(PRODUCT_NAME "${CEF_TARGET_NAME}")
@@ -90,4 +76,3 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     SET_EXECUTABLE_TARGET_PROPERTIES(${_helper_target})
   endforeach()
 endif()
-

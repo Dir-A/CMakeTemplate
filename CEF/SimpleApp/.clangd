@@ -44,6 +44,7 @@ Diagnostics:
             readability-simplify-boolean-expr.IgnoreMacros: 1
             misc-unused-parameters.IgnoreVirtual: 1
             readability-identifier-length.IgnoredVariableNames: '^[ijk_]$'
+            misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic: 1
 
 Index:
   Background: Skip
