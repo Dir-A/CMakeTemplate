@@ -58,7 +58,6 @@ public:
 
 auto main(const int argc, char** argv) -> int
 {
-
   try
   {
     Preboot preboot{ argc, argv };

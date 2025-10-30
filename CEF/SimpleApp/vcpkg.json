@@ -8,7 +8,7 @@
   ],
   "vcpkg-configuration": {
     "$overlay-ports": [
-      "D:/Space/Code/GitHub/Registry/ports/"
+      "/Users/ptf/Downloads/Registry/ports/"
     ],
     "default-registry": {
       "kind": "git",
@@ -19,7 +19,7 @@
       {
         "kind": "git",
         "repository": "https://github.com/Dir-A/Registry.git",
-        "baseline": "0bc73aebffd9f9a1846dd1d7577b169f4be488d9",
+        "baseline": "beb378cf0bc5960b992741bd1a42e75c3fd7338d",
         "packages": [
           "zqf-*"
         ]
