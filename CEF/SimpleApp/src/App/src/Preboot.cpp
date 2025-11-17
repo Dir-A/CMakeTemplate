@@ -1,4 +1,5 @@
 #include "Preboot.hpp"
+#include <stdexcept>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -6,8 +7,7 @@
 #elif __linux__
 #include <filesystem>
 #elif __APPLE__
-#include "include/cef_application_mac.h"
-#include "include/wrapper/cef_helpers.h"
+#include <filesystem>
 #include "include/wrapper/cef_library_loader.h"
 auto CEFMacOSEntryInit() -> void;
 auto CEFMacOSEntryClean() -> void;
@@ -32,12 +32,16 @@ Preboot::Preboot([[maybe_unused]] const int argc, [[maybe_unused]] char** argv)
   this->args = CefMainArgs{ argc, argv };
   CefString(&this->settings.browser_subprocess_path) = (std::filesystem::current_path() / "CEFRuntime/CEFRuntime").c_str();
 #elif __APPLE__
-  this->args = CefMainArgs{ argc, argv };
-  CefScopedLibraryLoader library_loader;
-  if (!library_loader.LoadInMain())
+  const auto current_path = std::filesystem::path{ argv[0] }.parent_path();
+  const auto framework_dir = current_path / "CEFRuntime/Chromium Embedded Framework.framework/";
+  const auto subprocess_path = current_path / "CEFRuntime/CEFRuntime Helper.app/Contents/MacOS/CEFRuntime Helper";
+  if (cef_load_library((framework_dir / "Chromium Embedded Framework").c_str()) != 1)
   {
-    return 1;
+    throw std::runtime_error("error");
   }
+  this->args = CefMainArgs{ argc, argv };
+  CefString(&this->settings.framework_dir_path) = framework_dir;
+  CefString(&this->settings.browser_subprocess_path) = subprocess_path;
   ::CEFMacOSEntryInit();
 #endif
 }

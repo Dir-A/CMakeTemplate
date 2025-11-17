@@ -5,7 +5,7 @@ project(CEFSimpleApp VERSION 1.0 LANGUAGES C CXX)
 add_executable(${PROJECT_NAME}
   "src/main.cpp"
   "src/Preboot.cpp"
-  $<$<PLATFORM_ID:Darwin>:src/Preboot_macOS.mm>)
+  $<$<PLATFORM_ID:Darwin>:src/Preboot.mm>)
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 # Compiler
@@ -27,3 +27,19 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ZQF::CEF::CEF)
 set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH "$ORIGIN/CEFRuntime")
 set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE TRUE MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/res/Info.plist.in)
+
+# Runtime Directory
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+  if(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set(CEF_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/CEFSimpleApp.app/Contents/MacOS/CEFRuntime/" PARENT_SCOPE)
+  else()
+    set(CEF_RUNTIME_OUTPUT_DIRECTORY "CEFSimpleApp.app/Contents/MacOS/CEFRuntime/" PARENT_SCOPE)
+  endif()
+else()
+  if(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set(CEF_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/CEFRuntime/" PARENT_SCOPE)
+  else()
+    set(CEF_RUNTIME_OUTPUT_DIRECTORY "CEFRuntime/" PARENT_SCOPE)
+  endif()
+endif()
+
