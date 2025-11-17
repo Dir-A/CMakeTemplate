@@ -4,19 +4,25 @@ project(CEFSimpleApp VERSION 1.0 LANGUAGES C CXX)
 # Executable
 add_executable(${PROJECT_NAME}
   "src/main.cpp"
-  "src/Preboot.cpp"
+  "src/CEFPreset.cpp"
   $<$<PLATFORM_ID:Darwin>:src/Preboot.mm>)
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 # Compiler
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
-target_link_options(${PROJECT_NAME} PRIVATE $<$<C_COMPILER_ID:MSVC>:/Entry:mainCRTStartup>)
-target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/utf-8>)
-
-# Warning
-target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/W4>)
-target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>)
-target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra>)
+target_link_options(${PROJECT_NAME} PRIVATE
+  $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/Entry:mainCRTStartup> # msvc
+  $<$<OR:$<C_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:Clang>>: # clang
+  $<$<OR:$<C_COMPILER_FRONTEND_VARIANT:MSVC>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:/Entry:mainCRTStartup> # msvc frontend
+  >)
+target_compile_options(${PROJECT_NAME} PRIVATE
+  $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/utf-8 /W4> # msvc
+  $<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra> # gcc
+  $<$<OR:$<C_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:Clang>>: # clang
+  $<$<OR:$<C_COMPILER_FRONTEND_VARIANT:GNU>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:-Wall -Wextra> # gnu frontend
+  $<$<OR:$<C_COMPILER_FRONTEND_VARIANT:MSVC>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:/utf-8 /W4> # msvc frontend
+  >
+)
 
 # Exteranl Libraries
 find_package(zqf_cef_prebuilt CONFIG REQUIRED)
@@ -42,4 +48,3 @@ else()
     set(CEF_RUNTIME_OUTPUT_DIRECTORY "CEFRuntime/" PARENT_SCOPE)
   endif()
 endif()
-

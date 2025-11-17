@@ -1,4 +1,4 @@
-#include "Preboot.hpp"
+#include "CEFPreset.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -13,7 +13,7 @@ auto CEFMacOSEntryInit() -> void;
 auto CEFMacOSEntryClean() -> void;
 #endif
 
-Preboot::Preboot([[maybe_unused]] const int argc, [[maybe_unused]] char** argv)
+CEFPreset::CEFPreset([[maybe_unused]] const int argc, [[maybe_unused]] char** argv)
 {
   this->settings.no_sandbox = 1;
 
@@ -46,7 +46,7 @@ Preboot::Preboot([[maybe_unused]] const int argc, [[maybe_unused]] char** argv)
 #endif
 }
 
-Preboot::~Preboot()
+CEFPreset::~CEFPreset()
 {
 #ifdef __APPLE__
   ::CEFMacOSEntryClean();

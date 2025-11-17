@@ -1,6 +1,6 @@
 #include <list>
 #include <print>
-#include "Preboot.hpp"
+#include "CEFPreset.hpp"
 #include "include/cef_app.h"
 #include "include/cef_client.h"
 #include "include/cef_browser.h"
@@ -60,9 +60,11 @@ auto main(const int argc, char** argv) -> int
 {
   try
   {
-    Preboot preboot{ argc, argv };
+    CEFPreset preset{ argc, argv }; // init the platform stuff
+    CefMainArgs& args = preset.args;
+    CefSettings& settings = preset.settings;
 
-    CefInitialize(preboot.args, preboot.settings, CefRefPtr{ new MyApp{} }, nullptr);
+    CefInitialize(args, settings, CefRefPtr{ new MyApp{} }, nullptr);
     CefRunMessageLoop();
     CefShutdown();
 
