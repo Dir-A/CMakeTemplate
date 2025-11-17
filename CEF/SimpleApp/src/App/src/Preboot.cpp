@@ -1,10 +1,10 @@
 #include "Preboot.hpp"
-#include <stdexcept>
 
 #ifdef _WIN32
 #include <windows.h>
 #include <filesystem>
 #elif __linux__
+#include <stdexcept>
 #include <filesystem>
 #elif __APPLE__
 #include <filesystem>
