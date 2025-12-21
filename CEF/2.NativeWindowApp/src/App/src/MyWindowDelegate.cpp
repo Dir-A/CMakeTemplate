@@ -29,6 +29,11 @@ namespace CEFDemo
     return true;
   }
 
+  CefSize MyWndDelegate::GetMinimumSize(CefRefPtr<CefView> view)
+  {
+    return { 640, 360 };
+  }
+
   bool MyBrowserViewDelegate::OnPopupBrowserViewCreated(CefRefPtr<CefBrowserView> browser_view, CefRefPtr<CefBrowserView> popup_browser_view, bool is_devtools)
   {
     const CefRefPtr<MyWndDelegate> popup_wnd_delegate{ new MyWndDelegate{ popup_browser_view, is_devtools } };

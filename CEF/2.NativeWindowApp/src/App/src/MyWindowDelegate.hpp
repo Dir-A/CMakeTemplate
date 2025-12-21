@@ -28,6 +28,7 @@ namespace CEFDemo
     void OnWindowDestroyed(CefRefPtr<CefWindow> window) override;
     bool CanClose(CefRefPtr<CefWindow> window) override;
     bool CanResize(CefRefPtr<CefWindow> window) override;
+    CefSize GetMinimumSize(CefRefPtr<CefView> view) override;
   };
 
   class MyBrowserViewDelegate : public CefBrowserViewDelegate
