@@ -10,16 +10,31 @@
       "inherits": "macos-clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_OSX_ARCHITECTURES":"x86_64"
+        "CMAKE_OSX_ARCHITECTURES": "x86_64"
       }
     },
     {
       "name": "macos-clang-x64-rel",
       "displayName": "MacOS Clang x64 Release",
-      "inherits": "macos-clang-base",
+      "inherits": "macos-clang-x64-dbg",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_OSX_ARCHITECTURES":"x86_64"
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "macos-clang-x64-minsizerel",
+      "displayName": "MacOS Clang x64 MinSizeRel",
+      "inherits": "macos-clang-x64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "macos-clang-x64-relwithdebinfo",
+      "displayName": "MacOS Clang x64 RelWithDebInfo",
+      "inherits": "macos-clang-x64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
     }
   ]

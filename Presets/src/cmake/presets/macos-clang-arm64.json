@@ -10,16 +10,31 @@
       "inherits": "macos-clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_OSX_ARCHITECTURES":"arm64"
+        "CMAKE_OSX_ARCHITECTURES": "arm64"
       }
     },
     {
       "name": "macos-clang-arm64-rel",
       "displayName": "MacOS Clang ARM64 Release",
-      "inherits": "macos-clang-base",
+      "inherits": "macos-clang-arm64-dbg",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_OSX_ARCHITECTURES":"arm64"
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "macos-clang-arm64-minsizerel",
+      "displayName": "MacOS Clang ARM64 MinSizeRel",
+      "inherits": "macos-clang-arm64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "macos-clang-arm64-relwithdebinfo",
+      "displayName": "MacOS Clang ARM64 RelWithDebInfo",
+      "inherits": "macos-clang-arm64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
     }
   ]

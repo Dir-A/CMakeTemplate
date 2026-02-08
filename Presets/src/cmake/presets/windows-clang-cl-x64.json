@@ -15,26 +15,23 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_COMPILER_TARGET": "x86_64-pc-windows-msvc",
-        "CMAKE_CXX_COMPILER_TARGET": "x86_64-pc-windows-msvc"
+        "CMAKE_CXX_COMPILER_TARGET": "x86_64-pc-windows-msvc",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-clang-cl"
       }
     },
     {
-      "name": "windows-clang-cl-x64-dbg-static",
-      "displayName": "Windows Clang-cl x64 Debug Static",
+      "name": "windows-clang-cl-x64-dbg-static-mt",
+      "displayName": "Windows Clang-cl x64 Debug Static MT",
       "inherits": "windows-clang-cl-x64-dbg",
       "cacheVariables": {
         "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug",
-        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-clang-cl-static-mt"
       }
     },
     {
       "name": "windows-clang-cl-x64-rel",
       "displayName": "Windows Clang-cl x64 Release",
-      "inherits": "windows-clang-cl-base",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
+      "inherits": "windows-clang-cl-x64-dbg",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_C_COMPILER_TARGET": "x86_64-pc-windows-msvc",
@@ -42,26 +39,9 @@
       }
     },
     {
-      "name": "windows-clang-cl-x64-rel-static",
-      "displayName": "Windows Clang-cl x64 Release Static",
-      "inherits": "windows-clang-cl-x64-rel",
-      "cacheVariables": {
-        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
-        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
-      }
-    },
-    {
       "name": "windows-clang-cl-x64-msr",
       "displayName": "Windows Clang-cl x64 MinSizeRel",
       "inherits": "windows-clang-cl-x64-rel",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "MinSizeRel"
-      }
-    },
-    {
-      "name": "windows-clang-cl-x64-msr-static",
-      "displayName": "Windows Clang-cl x64 MinSizeRel Static",
-      "inherits": "windows-clang-cl-x64-rel-static",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "MinSizeRel"
       }
@@ -75,9 +55,26 @@
       }
     },
     {
-      "name": "windows-clang-cl-x64-rwi-static",
-      "displayName": "Windows Clang-cl x64 RelWithDebInfo Static",
-      "inherits": "windows-clang-cl-x64-rel-static",
+      "name": "windows-clang-cl-x64-rel-static-mt",
+      "displayName": "Windows Clang-cl x64 Release Static MT",
+      "inherits": "windows-clang-cl-x64-rel",
+      "cacheVariables": {
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-clang-cl-static-mt"
+      }
+    },
+    {
+      "name": "windows-clang-cl-x64-msr-static-mt",
+      "displayName": "Windows Clang-cl x64 MinSizeRel Static MT",
+      "inherits": "windows-clang-cl-x64-rel-static-mt",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "windows-clang-cl-x64-rwi-static-mt",
+      "displayName": "Windows Clang-cl x64 RelWithDebInfo Static MT",
+      "inherits": "windows-clang-cl-x64-rel-static-mt",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
