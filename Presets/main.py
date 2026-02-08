@@ -50,3 +50,4 @@ bring_config_to_the_front(merged_preset, "config-base")
 os.makedirs(".build/", exist_ok=True)
 with open(".build/CMakePresets.json", "w", encoding="utf-8") as ofs:
     json.dump(obj=merged_preset, fp=ofs, ensure_ascii=False, indent=2)
+    ofs.write('\n')
