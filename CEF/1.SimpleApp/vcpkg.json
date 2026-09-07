@@ -7,9 +7,6 @@
     "zqf-cmake-modules"
   ],
   "vcpkg-configuration": {
-    "$overlay-ports": [
-      "/Users/ptf/Downloads/Registry/ports/"
-    ],
     "default-registry": {
       "kind": "git",
       "repository": "https://github.com/Microsoft/vcpkg",
@@ -19,7 +16,7 @@
       {
         "kind": "git",
         "repository": "https://github.com/Dir-A/Registry.git",
-        "baseline": "beb378cf0bc5960b992741bd1a42e75c3fd7338d",
+        "baseline": "82d9fbc8bc7ede5fe7953fb8f58dfe37a9c70329",
         "packages": [
           "zqf-*"
         ]
