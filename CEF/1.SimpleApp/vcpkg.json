@@ -16,7 +16,7 @@
       {
         "kind": "git",
         "repository": "https://github.com/Dir-A/Registry.git",
-        "baseline": "82d9fbc8bc7ede5fe7953fb8f58dfe37a9c70329",
+        "baseline": "6aa9980be4402f68a8d7808f00737a52e0f419a7",
         "packages": [
           "zqf-*"
         ]
