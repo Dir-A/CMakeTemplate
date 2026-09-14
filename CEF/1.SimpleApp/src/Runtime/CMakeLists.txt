@@ -19,7 +19,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows|Linux")
   # External Libraries
   zqf_cef_prebuilt_config(${PROJECT_NAME})
   zqf_cef_prebuilt_copyfiles(${PROJECT_NAME})
-  target_link_libraries(${PROJECT_NAME} PRIVATE ZQF::CEF::CLibrary)
+  target_link_libraries(${PROJECT_NAME} PRIVATE ZQF::CEFPrebuilt::CLibrary)
 
   # Properties
   if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
@@ -28,7 +28,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows|Linux")
     set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH "$ORIGIN/${PROJECT_NAME}")
   endif()
 
-  get_target_property(target_out_dir ${_helper_target} RUNTIME_OUTPUT_DIRECTORY)
+  get_target_property(target_out_dir ${PROJECT_NAME} RUNTIME_OUTPUT_DIRECTORY)
   set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${target_out_dir}/${PROJECT_NAME}/")
 
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
