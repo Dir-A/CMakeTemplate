@@ -64,10 +64,13 @@ auto main(const int argc, char** argv) -> int
     CefMainArgs& args = preset.args;
     CefSettings& settings = preset.settings;
 
-    CefInitialize(args, settings, CefRefPtr{ new MyApp{} }, nullptr);
+    if (!CefInitialize(args, settings, CefRefPtr{ new MyApp{} }, nullptr))
+    {
+      return CefGetExitCode();
+    }
+
     CefRunMessageLoop();
     CefShutdown();
-
     return 0;
   }
   catch (const std::exception& err)

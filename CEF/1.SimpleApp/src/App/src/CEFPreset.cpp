@@ -19,29 +19,25 @@ CEFPreset::CEFPreset([[maybe_unused]] const int argc, [[maybe_unused]] char** ar
   this->settings.no_sandbox = 1;
 
 #ifdef _WIN32
-  // for debug
-  ::AllocConsole();
-  ::freopen("CONOUT$", "w", stdout);
-  ::freopen("CONOUT$", "w", stderr);
-
-  const auto current_dir = std::filesystem::current_path();
-  ::SetDllDirectoryW((current_dir / "CEFRuntime").wstring().data());
-
   this->args = CefMainArgs{ ::GetModuleHandleW(nullptr) };
-  CefString(&this->settings.browser_subprocess_path) = (current_dir / L"CEFRuntime/CEFRuntime.exe").native();
+  const auto runtime_dir = std::filesystem::path{ argv[0] }.parent_path() / L"ZQFCEFRuntime\\";
+  cef_version_info_t version_info{};
+  CEF_POPULATE_VERSION_INFO(&version_info);
+  if (!this->loader.LoadInMainAssert((runtime_dir / L"libcef.dll").wstring().c_str(), nullptr, true, &version_info))
+  {
+    throw std::runtime_error("failed to load libcef.dll");
+  }
+  CefString(&this->settings.browser_subprocess_path) = (runtime_dir / L"ZQFCEFRuntime.exe").native();
 #elif __linux__
   this->args = CefMainArgs{ argc, argv };
-  CefString(&this->settings.browser_subprocess_path) = (std::filesystem::current_path() / "CEFRuntime/CEFRuntime").c_str();
+  CefString(&this->settings.browser_subprocess_path) = (std::filesystem::path{ argv[0] }.parent_path() / "ZQFCEFRuntime/ZQFCEFRuntime").c_str();
 #elif __APPLE__
-  const auto current_path = std::filesystem::path{ argv[0] }.parent_path().parent_path();
-  const auto framework_dir = current_path / "Frameworks/Chromium Embedded Framework.framework";
-  const auto subprocess_path = current_path / "Frameworks/CEFRuntime Helper.app/Contents/MacOS/CEFRuntime Helper";
-  if (cef_load_library((framework_dir / "Chromium Embedded Framework").c_str()) != 1)
+  this->args = CefMainArgs{ argc, argv };
+  if (!loader.LoadInMain())
   {
     throw std::runtime_error("failed to load the CEF framework");
   }
-  this->args = CefMainArgs{ argc, argv };
-  CefString(&this->settings.browser_subprocess_path) = subprocess_path;
+  CefString(&this->settings.browser_subprocess_path) = std::filesystem::path{ argv[0] }.parent_path().parent_path() / "Frameworks/ZQFCEFRuntime Helper.app/Contents/MacOS/ZQFCEFRuntime Helper";
   ::CEFMacOSEntryInit();
 #endif
 }
